@@ -10,6 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using VkNet;
+using VkNet.Abstractions;
+using VkNet.Model;
 
 namespace VkBot
 {
@@ -25,6 +28,12 @@ namespace VkBot
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IVkApi>(sp => {
+                var api = new VkApi();
+                api.Authorize(new ApiAuthParams { AccessToken = Configuration["Config:AccessToken"] });
+                return api;
+            });
+            /// maybeErorr
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

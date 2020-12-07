@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 namespace VkBot.Controllers
 {
 	[Serializable]
-	public class Updates
+	public class UpdatesDto
 	{
 		/// <summary>
 		/// Тип события
