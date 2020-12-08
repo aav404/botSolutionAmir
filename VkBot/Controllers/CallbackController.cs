@@ -62,5 +62,11 @@ namespace VkBot.Controllers
 
             return Ok("ok");
         }
+
+        [HttpGet]
+        public IActionResult Callback()
+        {
+            return Ok("ok");
+        }
     }
 }
