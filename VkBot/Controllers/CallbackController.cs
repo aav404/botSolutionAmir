@@ -65,9 +65,17 @@ namespace VkBot.Controllers
         }
 
         [HttpGet]
+        public IActionResult GetLogs()
+        {
+
+
+            return Ok("Работает");
+        }
+
+        [HttpGet]
         public IActionResult Callback()
         {
-            return Ok("ok");
+            return Ok("Работает");
         }
     }
 }
