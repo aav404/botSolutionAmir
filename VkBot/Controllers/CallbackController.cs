@@ -53,8 +53,7 @@ namespace VkBot.Controllers
                         {
                             RandomId = new DateTime().Millisecond,
                             PeerId = msg.PeerId.Value,
-                            Message = "кха тьфу",
-                            UserId = 322696326
+                            Message = "кха тьфу"
                         });
 
                         break;
@@ -66,14 +65,6 @@ namespace VkBot.Controllers
 
         [HttpGet]
         public IActionResult GetLogs()
-        {
-
-
-            return Ok("Работает");
-        }
-
-        [HttpGet]
-        public IActionResult Callback()
         {
             return Ok("Работает");
         }
