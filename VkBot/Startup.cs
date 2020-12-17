@@ -31,7 +31,7 @@ namespace VkBot
             services.AddSingleton<IVkApi>(sp =>
             {
                 var api = new VkApi();
-                api.Authorize(new ApiAuthParams { AccessToken = Configuration["Config:AccessToken"] });
+                api.Authorize(new ApiAuthParams { AccessToken = Configuration["Config:AccessToken"]});
                 return api;
             });
 
