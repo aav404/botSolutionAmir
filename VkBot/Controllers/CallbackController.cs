@@ -58,7 +58,7 @@ namespace VkBot.Controllers
                         _vkApi.Messages.Send(new MessagesSendParams
                         {
                             RandomId = DateTime.Now.Millisecond,
-                            //PeerId = msg.PeerId.Value,
+                            PeerId = msg.PeerId.Value,
                             Message = "кха тьфу",
                             UserId = msg.UserId
                         });
