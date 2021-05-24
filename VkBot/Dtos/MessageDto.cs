@@ -2,10 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace VkBot.Dtos
 {
+    [DataContract]
     public class MessageDto
     {
         [JsonProperty("id")]
@@ -18,10 +20,10 @@ namespace VkBot.Dtos
         public long Out { get; set; }
 
         [JsonProperty("user_id")]
-        public long UserId { get; set; }
+        public long User_id { get; set; }
 
         [JsonProperty("read_state")]
-        public long ReadState { get; set; }
+        public long Read_State { get; set; }
 
         [JsonProperty("title")]
         public string Title { get; set; }
@@ -29,13 +31,7 @@ namespace VkBot.Dtos
         [JsonProperty("body")]
         public string Body { get; set; }
 
-        [JsonProperty("random_id")]
-        public long RandomId { get; set; }
-
         [JsonProperty("owner_ids")]
-        public object[] OwnerIds { get; set; }
-
-        [JsonProperty("from_id")]
-        public long FromId { get; set; }
+        public object[] Owner_Ids { get; set; }
     }
 }

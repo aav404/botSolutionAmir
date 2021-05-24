@@ -53,14 +53,14 @@ namespace VkBot.Controllers
                         //var msg = JsonConvert.DeserializeObject<Message>(updates.Message);
                         // Отправим в ответ полученный от пользователя текст
                         // ToDo Запилить сюда логику ебучую с сообщениями
-                        var msg = _mapper.Map<Message>(updates.Object);
+                        var msg = _mapper.Map<Message>(updates.Object); // Надо в обжекте исправить названия свойств будет
 
                         _vkApi.Messages.Send(new MessagesSendParams
                         {
-                            RandomId = DateTime.Now.Millisecond,
-                            PeerId = msg.PeerId.Value,
-                            Message = "кха тьфу",
-                            UserId = msg.UserId
+                            UserId = updates.Object.User_id,
+                            RandomId = Extensions.GenerateRandomId(),
+                            PeerId = updates.GroupId,
+                            Message = "тест бота",
                         });
 
                         break;

@@ -7,6 +7,8 @@ namespace VkBot
 {
     public static class Extensions
     {
-        public static DateTime TicksToDateTime(this long ticks) => new DateTime(ticks);
+        public static DateTime TicksToDateTime(long ticks) => new DateTime(ticks);
+
+        public static int? GenerateRandomId() => (int?)DateTime.Now.Ticks;
     }
 }

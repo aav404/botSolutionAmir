@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using VkBot.Dtos;
@@ -7,6 +8,7 @@ using VkNet.Model;
 namespace VkBot.Controllers
 {
     [Serializable]
+    [DataContract]
     public class UpdatesDto
     {
         /// <summary>
@@ -20,6 +22,7 @@ namespace VkBot.Controllers
         /// Структура объекта зависит от типа уведомления
         /// </summary>
         [JsonProperty("object")]
+        [DataMember]
         public MessageDto Object { get; set; }
 
         /// <summary>

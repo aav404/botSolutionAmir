@@ -13,7 +13,7 @@ namespace VkBot.Mapper
         public MapperProfiler()
         {
             CreateMap<MessageDto, Message>()
-           .ForMember(d => d.UserId, s => s.MapFrom(m => m.UserId))
+           .ForMember(d => d.UserId, s => s.MapFrom(m => m.User_id))
            .ForAllOtherMembers(f => f.Ignore());
         }
     }
