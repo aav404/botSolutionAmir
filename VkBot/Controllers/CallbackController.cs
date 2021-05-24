@@ -46,14 +46,10 @@ namespace VkBot.Controllers
                     }
 
                 // Новое сообщение
-                case "message_new":
+                //case "message_new":
                     {
-                        // Десериализация
-                        //var msg = Message.FromJson(new VkResponse());
-                        //var msg = JsonConvert.DeserializeObject<Message>(updates.Message);
-                        // Отправим в ответ полученный от пользователя текст
-                        // ToDo Запилить сюда логику ебучую с сообщениями
-                        var msg = _mapper.Map<Message>(updates.Object); // Надо в обжекте исправить названия свойств будет
+                        // маппер по сути не нужен, но пусть пока будет
+                        // var msg = _mapper.Map<Message>(updates.Object); // Надо в обжекте исправить названия свойств будет
 
                         _vkApi.Messages.Send(new MessagesSendParams
                         {
