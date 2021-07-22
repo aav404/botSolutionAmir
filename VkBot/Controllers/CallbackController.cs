@@ -46,10 +46,11 @@ namespace VkBot.Controllers
                     }
 
                 // Новое сообщение
-                //case "message_new":
+                case "message_new":
                     {
-                        // маппер по сути не нужен, но пусть пока будет
-                        // var msg = _mapper.Map<Message>(updates.Object); // Надо в обжекте исправить названия свойств будет
+                        var keyboard = new VkNet.Model.Keyboard.KeyboardBuilder("text"); 
+                        keyboard.AddButton("Тестовая кнопка", "test_1"); 
+                        keyboard.SetInline(false);
 
                         _vkApi.Messages.Send(new MessagesSendParams
                         {
@@ -57,6 +58,7 @@ namespace VkBot.Controllers
                             RandomId = Extensions.GenerateRandomId(),
                             PeerId = updates.GroupId,
                             Message = "тест бота",
+                            Keyboard = keyboard.Build(),
                         });
 
                         break;
