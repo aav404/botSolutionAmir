@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using VkBot.BD;
 using VkBot.Dtos;
 using VkNet.Abstractions;
 using VkNet.Model;
@@ -73,9 +74,9 @@ namespace VkBot.Controllers
                         {
                             SendMenu(updates);
 
-                            communicatingWithAdmin.Remove(updates.Object.User_id);
+                            CommunicatingWithAdmin.communicatingWithAdminList.Remove(updates.Object.User_id);
                         }
-                        else if (communicatingWithAdmin.Contains(updates.Object.User_id))
+                        else if (CommunicatingWithAdmin.communicatingWithAdminList.Contains(updates.Object.User_id))
                         {
                             break;
                         }
