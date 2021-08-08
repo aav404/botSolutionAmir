@@ -45,8 +45,6 @@ namespace VkBot.Controllers
             },
         };
 
-        private List<long> communicatingWithAdmin = new List<long>();
-
         public CallbackController(IVkApi vkApi, IConfiguration configuration, IMapper mapper)
         {
             _vkApi = vkApi;
@@ -138,7 +136,7 @@ namespace VkBot.Controllers
                     }
                 case "Связаться с администратором.":
                     {
-                        communicatingWithAdmin.Add(updates.Object.User_id);
+                        CommunicatingWithAdmin.communicatingWithAdminList.Add(updates.Object.User_id);
                         PingAdmin(updates);
                         SendMessage(updates.Object.User_id, updates.GroupId, "Админ ответит в скором времени :)");
 
@@ -147,7 +145,7 @@ namespace VkBot.Controllers
                 default:
                     {
                         SendMessage(updates.Object.User_id, updates.GroupId, "Нажми на одну из кнопок, чтобы получить ответ :)");
-
+                        SendMenu(updates);
                         break;
                     }
             }
@@ -159,7 +157,7 @@ namespace VkBot.Controllers
         {
             _vkApi.Messages.Send(new MessagesSendParams
             {
-                UserId = 322696326,
+                UserId = 24958821,
                 RandomId = Extensions.GenerateRandomId(),
                 PeerId = updates.GroupId,
                 Message = "Тебя пингует какой то долбаёб, чекни группу",

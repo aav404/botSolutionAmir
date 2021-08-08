@@ -8,6 +8,6 @@ namespace VkBot.BD
     static class CommunicatingWithAdmin
     {
         public static List<long> communicatingWithAdminList = new List<long>();
-
+        public static List<long> CommunicatingWithAdminList { get; set; }
     }
 }
