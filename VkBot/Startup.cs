@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using VkBot.BD;
 using VkBot.Mapper;
 using VkNet;
 using VkNet.Abstractions;
@@ -32,6 +33,8 @@ namespace VkBot
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var config = Configuration.GetSection("Config").Get<Config>();
+
             services.AddAutoMapper(mc =>
             {
                 mc.AddProfile(new MapperProfiler());
@@ -47,10 +50,14 @@ namespace VkBot
             services.AddSingleton<IVkApi>(sp =>
             {
                 var api = new VkApi();
-                api.Authorize(new ApiAuthParams { AccessToken = Configuration["Config:AccessToken"]});
+                api.Authorize(new ApiAuthParams { AccessToken = config.AccessToken});
                 
                 return api;
             });
+
+            services.AddTransient<IIgnoreListRepository, IgnoreListRepository>(provider => new IgnoreListRepository(config));
+
+            services.AddSingleton(config);
 
             services.AddControllers();
         }

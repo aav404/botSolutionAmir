@@ -4,7 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using VkBot.BD;
+using VkBot.BD.Entity;
 using VkBot.Dtos;
 using VkNet.Abstractions;
 using VkNet.Model;
@@ -21,15 +23,19 @@ namespace VkBot.Controllers
         /// <summary>
         /// Конфигурация приложения
         /// </summary>
-        private readonly IConfiguration _configuration;
-        private readonly IMapper _mapper;
+        private readonly Config _configuration;
 
         /// <summary>
         /// Апи Вк
         /// </summary>
         private readonly IVkApi _vkApi;
 
-        private readonly Dictionary<string, string> questions = new Dictionary<string, string>
+        /// <summary>
+        /// Репозиторий игнорируемых пользователей
+        /// </summary>
+        readonly IIgnoreListRepository _repo;
+
+        private readonly Dictionary<string, string> _questions = new Dictionary<string, string>
         {
             {
                 "button1", "За ваши модификации дают бан?"
@@ -45,16 +51,15 @@ namespace VkBot.Controllers
             },
         };
 
-        public CallbackController(IVkApi vkApi, IConfiguration configuration, IMapper mapper)
+        public CallbackController(IVkApi vkApi, Config configuration, IIgnoreListRepository repo)
         {
             _vkApi = vkApi;
             _configuration = configuration;
-            _mapper = mapper;
-
+            _repo = repo;
         }
 
         [HttpPost]
-        public IActionResult Callback([FromBody] UpdatesDto updates)
+        public async Task<IActionResult> CallbackAsync([FromBody] UpdatesDto updates)
         {
             // Тип события
             switch (updates.Type)
@@ -62,7 +67,7 @@ namespace VkBot.Controllers
                 // Ключ-подтверждение
                 case "confirmation":
                     {
-                        return Ok(_configuration["Config:Confirmation"]);
+                        return Ok(_configuration.Confirmation);
                     }
 
                 // Новое сообщение
@@ -72,15 +77,18 @@ namespace VkBot.Controllers
                         {
                             SendMenu(updates);
 
-                            CommunicatingWithAdmin.communicatingWithAdminList.Remove(updates.Object.User_id);
+                            // Удаляем юзера из БД, если такой есть
+                            var user = await _repo.GetAsync(updates.Object.User_id);
+                            if (user != null)
+                                await _repo.DeleteAsync(updates.Object.User_id);
                         }
-                        else if (CommunicatingWithAdmin.communicatingWithAdminList.Contains(updates.Object.User_id))
+                        else if (await _repo.GetAsync(updates.Object.User_id) != null)
                         {
                             break;
                         }
                         else
                         {
-                            SendResponse(updates);
+                            await SendResponseAsync(updates);
                         }
 
                         break;
@@ -95,7 +103,7 @@ namespace VkBot.Controllers
             var keyboard = new VkNet.Model.Keyboard.KeyboardBuilder("text");
             keyboard.SetInline(true);
 
-            foreach (var question in questions)
+            foreach (var question in _questions)
             {
                 keyboard.AddButton(question.Value, question.Key);
                 keyboard.AddLine();
@@ -104,7 +112,7 @@ namespace VkBot.Controllers
             SendMessage(updates.Object.User_id, updates.GroupId, "Выбери вопрос", keyboard.Build());
         }
 
-        private void SendResponse(UpdatesDto updates)
+        private async Task SendResponseAsync(UpdatesDto updates)
         {
             var keyboard = new VkNet.Model.Keyboard.KeyboardBuilder("text");
             keyboard.SetInline(true);
@@ -136,7 +144,7 @@ namespace VkBot.Controllers
                     }
                 case "Связаться с администратором.":
                     {
-                        CommunicatingWithAdmin.communicatingWithAdminList.Add(updates.Object.User_id);
+                        await _repo.CreateAsync(updates.Object.User_id);
                         PingAdmin(updates);
                         SendMessage(updates.Object.User_id, updates.GroupId, "Админ ответит в скором времени :)");
 
